@@ -1,4 +1,7 @@
 EXE_INC = \
+    -I./create \
+    -I./species \
+    -I./alpha \
     -I./lnInclude \
     -I../VoF \
     -I../finiteVolume/interpolationSchemes/lnInclude \
