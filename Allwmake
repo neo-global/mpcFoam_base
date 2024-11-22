@@ -1,0 +1,8 @@
+#!/bin/bash
+
+wmake all twoPhaseVOF/src/VoF
+wmake all interpolationSchemes
+wmake VoF
+wmake mpcFoam
+#wmake solver/compressibleInterFlow
+
