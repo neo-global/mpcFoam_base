@@ -1,3 +1,5 @@
+#include "createRDeltaT.H"
+
 Info<< "Reading field p_rgh\n" << endl;
 volScalarField p_rgh
 (
@@ -176,7 +178,7 @@ volScalarField surfaceCell
 
 #include "createCustomDict.H"
 #include "createScalarFields.H"
-//#include "createScalarSource.H"
+#include "createScalarSource.H"
 #include "createIsoAdvection.H"
 
 #include "createFvOptions.H"

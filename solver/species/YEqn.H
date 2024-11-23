@@ -11,7 +11,7 @@ if(solveScalar=="true")
 	    IOobject::groupName("alpha", mixture.alpha1().group())
 	);
 
-        surfaceScalarField& alpha = mesh.lookupObjectRef<volScalarField>
+        surfaceScalarField& alphaf = mesh.lookupObjectRef<surfaceScalarField>
 	(
 	    IOobject::groupName("alphaf", mixture.alpha1().group())
 	);
@@ -26,7 +26,7 @@ if(solveScalar=="true")
 	    Dtf *= alphaf;
 	}
 
-        surfaceSurfaceField alphaPhi = fvc::flux(U)*alphaf;
+        surfaceScalarField alphaPhi = fvc::flux(U)*alphaf;
 
 	word interfaceMethod
 	(
@@ -74,7 +74,7 @@ if(solveScalar=="true")
                     IOobject::READ_IF_PRESENT,
                     IOobject::AUTO_WRITE
         	),
-        	fvc::reconstruct(alphaPhi1Un)
+        	fvc::reconstruct(alphaPhi)
             );
 
             alphaPhiVol.write();

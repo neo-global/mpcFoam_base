@@ -11,7 +11,7 @@ if (interfaceMethod == "MULES")
 {
     //advector.construct();
     #include "alphaEqnMULES.H"
-    advector.reconstruct();
+    advector.construct();
 }
 else if (interfaceMethod == "isoAdvector")
 {
@@ -31,7 +31,7 @@ else if (interfaceMethod == "isoAdvector")
         << "  1 - Max(" << alpha1.name() << ") = " << 1 - max(alpha1).value()
         << endl;
 
-    advector.reconstruct();
+    advector.construct();
     //advector.reconstruct(alpha); //more generalizable implementation also exists.
 }
 

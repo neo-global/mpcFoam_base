@@ -4,7 +4,7 @@ EXE_INC = \
     -I./alpha \
     -I./lnInclude \
     -I../VoF \
-    -I../finiteVolume/interpolationSchemes/lnInclude \
+    -I../interpolationSchemes/lnInclude \
     -I../twoPhaseVOF/src/VoF/lnInclude \
     -I$(LIB_SRC)/transportModels/twoPhaseMixture/lnInclude \
     -I$(LIB_SRC)/transportModels \
