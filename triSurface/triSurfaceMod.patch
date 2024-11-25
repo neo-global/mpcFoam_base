@@ -1,0 +1,44 @@
+--- triSurfaceOld.H	2024-11-25 12:12:48.663597148 +0530
++++ triSurface.H	2024-11-25 12:12:40.903474856 +0530
+@@ -333,6 +333,11 @@
+                 return patches_;
+             }
+ 
++	    inline const List<labelledTri>& surfFaces() const //-RM
++	    {
++		return static_cast<const List<labelledTri>&>(*this);
++	    }
++
+             //- Return edge-face addressing sorted (for edges with more than
+             //  2 faces) according to the angle around the edge.
+             //  Orientation is anticlockwise looking from
+@@ -345,6 +350,29 @@
+             //  If >2 neighbours: undetermined.
+             const labelList& edgeOwner() const;
+ 
++	    //-RM
++	    //- Face area vectors (Normals)
++/*
++	    inline const vectorField& Sf() const
++	    {
++		return ParentType::faceAreas();
++	    }
++
++	    //- Face area magnitudes 
++	    inline const vectorField& magSf() const
++	    {
++		return ParentType::magFaceAreas();
++	    }
++*/
++	    //- Face centres 
++	    inline const vectorField& Cf() const
++	    {
++		return ParentType::faceCentres();
++	    }
++
++	    
++
++
+ 
+         // Edit
+ 
