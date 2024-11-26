@@ -163,7 +163,10 @@ int main(int argc, char *argv[])
 
             mixture.correct();
 
+            #include "thermoLoopsFoam.H" // Added
             #include "UEqn.H"
+            
+            
 
             // --- Pressure corrector loop
             while (pimple.correct())

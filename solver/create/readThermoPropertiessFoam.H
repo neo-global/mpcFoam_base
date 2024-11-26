@@ -31,18 +31,18 @@ dimensionedScalar Tiso
     thermoProperties.lookup("Tiso")
 );
 
-dimensionedScalar Calpha
+dimensionedScalar Ydelta
 (
-    "Calpha",
+    "Ydelta",
     dimless,
-    thermoProperties.lookup("Calpha")
+    thermoProperties.lookup("Ydelta")
 );
 
-dimensionedScalar Ceut
+dimensionedScalar Yeut
 (
-    "Ceut",
+    "Yeut",
     dimless,
-    thermoProperties.lookup("Ceut")
+    thermoProperties.lookup("Yeut")
 );
 
 dimensionedScalar L
@@ -53,10 +53,10 @@ dimensionedScalar L
 );
 
 // solidus and liquidus slopes
-dimensionedScalar msol = (Teut - Tmelt)/Calpha;
-dimensionedScalar mliq = (Teut - Tmelt)/Ceut;
+dimensionedScalar msol = (Teut - Tmelt)/Ydelta;
+dimensionedScalar mliq = (Teut - Tmelt)/Yeut;
 
-dimensionedScalar kp = Calpha/Ceut;
+dimensionedScalar kp = Ydelta/Yeut;
 
 const scalar nThermoCorr
 (
