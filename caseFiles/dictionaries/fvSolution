@@ -1,0 +1,262 @@
+/*--------------------------------*- C++ -*----------------------------------*\
+  =========                 |
+  \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox
+   \\    /   O peration     | Website:  https://openfoam.org
+    \\  /    A nd           | Version:  6
+     \\/     M anipulation  |
+\*---------------------------------------------------------------------------*/
+FoamFile
+{
+    version     2.0;
+    format      ascii;
+    class       dictionary;
+    location    "system";
+    object      fvSolution;
+}
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+
+solvers
+{
+    "alpha.*"
+    {
+	interfaceMethod "isoAdvector";
+	isoFaceTol	1e-10;
+	surfCellTol	1e-3;
+	snapTol		0;
+	nAlphaBounds	3;
+	clip		false;
+	writeIsoFaces	false;
+//	gradAlphaNormal	true;	
+
+	nAlphaCorr	1;	
+        nAlphaSubCycles 1;
+        cAlpha          1;
+    }
+
+    p
+    {
+        solver          PCG;
+        preconditioner  DIC;
+        tolerance       1e-16;
+        relTol          0;
+    }
+    pFinal
+    {
+        solver          PCG;
+        preconditioner  DIC;
+        tolerance       1e-16;
+        relTol          0;
+    }
+
+    "pcorr.*"
+    {
+        solver          GAMG;
+        preconditioner
+        {
+            preconditioner  GAMG;
+            tolerance       1e-16;
+            relTol          0;
+            smoother        GaussSeidel;
+        }
+        smoother        GaussSeidel;
+        tolerance       1e-16;
+        relTol          0;
+        maxIter         100;
+    }
+
+    p_rgh
+    {
+        solver          PCG;
+        tolerance       1e-16;
+        relTol          1e-6;
+	preconditioner	DIC;
+//        smoother        GaussSeidel;
+        nPreSweeps      1;
+        nPostSweeps     2;
+        nFinestSweeps   2;
+
+        needReference   yes;
+        nCellsInCoarsestLevel 50;
+        agglomerator    algebraicPair;
+        mergeLevels     1;
+    }
+
+    p_rghFinal
+    {
+        $p_rgh;
+	preconditioner DIC;
+/*        {
+            preconditioner  DIC;	//FDIC is parallel inconsistent
+            tolerance       1e-12;
+            relTol          0;
+            nVcycles        2;
+            //smoother        DIC;
+        }
+  */
+      tolerance       1e-16;
+        relTol          0;
+    }
+    
+    epsilon
+    {
+        solver         PBiCG;
+        preconditioner DILU;
+        tolerance      1e-16;
+        relTol         0;
+        smoother       GaussSeidel;
+    }
+
+    epsilonFinal 
+    {
+        solver          PBiCG;
+        preconditioner  DILU;
+        tolerance       1e-16;
+        relTol          0;
+    }
+
+    omega
+    {
+	$epsilon;
+    }
+    omegaFinal
+    {
+	$epsilonFinal;
+    }
+    
+    k
+    {
+        solver          PBiCG;
+        preconditioner  DILU;
+        tolerance       1e-16;
+        relTol          0;
+        smoother        GaussSeidel;
+    }
+
+    kFinal 
+    {
+        solver          PBiCG;
+        preconditioner  DILU;
+        tolerance       1e-16;
+        relTol          0;
+    }
+
+
+    U
+    {
+        solver          PBiCG;
+	preconditioner  DILU;
+        smoother        GaussSeidel;
+        tolerance       1e-16;
+        relTol          0;
+        nSweeps         2;
+    }
+
+    UFinal
+    {
+        $U;
+        tolerance       1e-16;
+        relTol          0;
+    }
+
+    "Y|Yexp"
+    {
+	$U;
+    }
+
+    Yi 
+    {
+	$U;
+	relTol	0;
+    }
+
+
+    Phi
+    {
+    	$p_rgh;
+    }
+
+}
+
+PIMPLE
+{
+    nCorrectors         2;
+    nNonOrthogonalCorrectors 1;
+    nOuterCorrectors	1; //40;
+    turbOnFinalIterOnly false; 
+ 
+    residualControl
+    {
+        U               1e-5;
+        p_rgh           1e-5;
+        "pcorr.*"       1e-5;
+        k               1e-6;
+        epsilon         1e-6;
+    }
+    outerCorrectorResidualControl
+    {
+        U
+        {
+            tolerance   1e-5;
+            relTol      0.0;   
+        }
+        p_rgh 
+        {
+            tolerance   1e-5;
+            relTol      0;   
+        }
+        p_rghFinal 
+        {
+            tolerance   1e-5;
+            relTol      0;   
+        }
+        epsilon
+        {
+            tolerance   1e-6;
+            relTol      0;
+        }
+        k
+        {
+            tolerance   1e-6;
+            relTol      0;
+        }
+    }
+pRefCell 0;
+pRefValue 101325;
+}
+/*
+PISO
+{
+    nCorrectors     		3;
+    nNonOrthogonalCorrectors 	3;
+    nAlphaCorr			1;
+    nAlphaSubCycles		1;
+    cycleAlpha			yes;
+    cAlpha			1;
+}
+*/
+/*
+
+relaxationFactors
+{
+    fields
+    {
+	p_rgh		0.3;
+    }
+    equations
+    {
+        U               0.7;
+        "alpha.*"       1;
+        k               0.8;
+        epsilon         0.8;
+    }
+}
+*/
+
+potentialFlow
+{
+	nNonOrthogonalCorrectors 10;
+	PhiRefCell 0;
+	PhiRefValue 1e5;
+}
+
+// ************************************************************************* //
