@@ -59,8 +59,8 @@ volScalarField T
 Info<< "Reading transportProperties\n" << endl;
 immiscibleIncompressibleTwoPhaseMixture mixture(U, phi);
 
-volScalarField& alpha1(mixture.alpha1());
-volScalarField& alpha2(mixture.alpha2());
+volScalarField& alpha1(mixture.alpha1());     //liquid
+volScalarField& alpha2(mixture.alpha2());     //air
 #include "createFaceFractions.H"
 
 const dimensionedScalar& rho1 = mixture.rho1();	//Use a copy instead of reference. Do not require this as we get this from fluid.rho() of sFoam
@@ -79,7 +79,7 @@ volScalarField rho
 	IOobject::AUTO_WRITE
     ),
   //  alpha1*rho1 + alpha2*rho2
-   alpha1*fluid.rho() + alpha2*rho2
+   alpha1*fluid.rho() + alpha2*rho2                            //error chnace
 );
 rho.oldTime();
 

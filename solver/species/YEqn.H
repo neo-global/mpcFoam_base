@@ -23,10 +23,13 @@ if(solveScalar=="true")
 	word useDtf(customDict.lookup("useDtf"));
 	if(useDtf=="true")
 	{
-	    Dtf *= alphaf;
+	    //Dtf *= alphaf;
+	    Dtf=Dtf*(alphaf*rho1_B);
 	}
 
-        surfaceScalarField alphaPhi = fvc::flux(U)*alphaf;
+        //surfaceScalarField alphaPhi = fvc::flux(U)*alphaf;
+        surfaceScalarField alphaPhi = rhoPhi*alphaf;
+        
 
 	word interfaceMethod
 	(
@@ -42,12 +45,32 @@ if(solveScalar=="true")
         word divScheme("div(phi,Y)");
 
 	//Solve YEqn
+        
+        /* // Relative composition for advection/diffusion source terms
+              volScalarField CRel("CRel", C2 - C);
 
+         fvScalarMatrix CEqn
+        (
+        fvm::ddt(rho, C)                              from SolidificationFoam
+      + fvm::div(phi, C)
+      - fvm::laplacian(alpha2*rho2*D2, C)
+    ==
+        fvc::laplacian(alpha2*rho2*D2, CRel)
+      - fvc::div(phi, CRel)
+    );
+
+        */   
+        
+        volScalarField YRel("YRel", Y2 - Y);
+           
         fvScalarMatrix YEqn
         (
-             fvm::ddt(Y)
+             fvm::ddt(rho,Y)
            + fvm::div(alphaPhi, Y, divScheme) //replace this with alphaPhi1Un
            - fvm::laplacian(Dtf, Y)
+           ==
+           fvc::laplacian(Dtf, YRel)
+           - fvc::div(alphaPhi, YRel)
            //  ==
            // fvOptions(rho, Y)
            // - fvm::Sp(S_Y, Y)

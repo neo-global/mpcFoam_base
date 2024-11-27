@@ -51,10 +51,10 @@ Foam::solidificationSystem::solidificationSystem
             IOobject::MUST_READ_IF_MODIFIED,
             IOobject::NO_WRITE
         )
-    ),
+    ),                                                               
     twoPhaseMixture(U.mesh(), *this),
 
-    rho1_
+    rho1_                    
     (
         "rho",
         dimensionSet(1, -3, 0, 0, 0),
