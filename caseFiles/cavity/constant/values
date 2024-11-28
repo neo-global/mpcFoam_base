@@ -1,0 +1,74 @@
+/*--------------------------------*- C++ -*----------------------------------*\
+  =========                 |
+  \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox
+   \\    /   O peration     | Website:  https://openfoam.org
+    \\  /    A nd           | Version:  6
+     \\/     M anipulation  |
+\*---------------------------------------------------------------------------*/
+FoamFile
+{
+    version     2.0;
+    format      ascii;
+    class       dictionary;
+    location    "constant";
+    object      values;
+}
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+
+
+solveScalar	true;
+Ystar		0.001449;	//mass fraction in liquid
+DY		1.88e-9;	//m2/s
+Sct		1;
+surfaceSource01	1;
+bubbleSource01	0;
+YgStar		0.832;		//pY, partial pressure ~ mole fraction in gas
+
+convectionBound	0.5;
+diffusionBound	0.5;
+
+useDtf    true;
+
+tMethod med;	//low (Le/Urel), med(0.3k/eps), high(k/eps)
+dirMethod foam; //foam, fluent
+
+
+/*
+tMethod: calculate tTurbLoc:
+tTurbLoc is minimum of eddy timescale and particle crossing timescale
+eddy timescale can be defined by Le/Urel, as per Gosman and Ionides.
+OR:
+Under the assumption of low Stokes number "tracer" particles, which travel
+with the average flow, it can be defined by equating turbulent diffusivity
+and eddy viscosity, to obtain 0.3*k/epsilon,
+OR:
+The eddy viscosity timescale #2, is adopted by OpenFoam in the form, k/epsilon,
+which yields a higher value than tracers.
+OR:
+if the particle relaxation time is high, the crossing time, as per Gosman and Ionaides
+can be lower than eddy timescales, and therefore used as tTurbLoc 
+- this last possibility does not arise for bubbles, as relaxation time is very low.
+
+Therefore we have the following order of eddy viscosities in the current system:
+	Le/Urel < 0.3*k/epsilon < k/epsilon;
+labeled:  low	< 	med	<    high
+
+Note that using the default formulation of OpenFoam, which is
+min(Le/Urel, k/epsilon)
+or modifying it to Cl*k/epsilon, we can obtain a formulation which transitions
+automatically between the two formulations. In the current case, if we want to generate 
+tEddy corresponding to k,epsilon, we need to manually switch away from Le/Urel,
+since that value is always lower.
+*/
+
+/*
+dirMethod: calculate the direction in which to add the stochastic velocity component
+
+OpenFoam does this by choosing a random normal angle [0,2*pi] and two random fractions in [0,1]
+
+Fluent seems to do this by choosing three random scalars, in addition to some constrains on them,
+since its plume is better behaved compared to our crude formulation.
+
+*/
+
+// ************************************************************************* //

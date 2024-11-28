@@ -10,47 +10,40 @@ FoamFile
     version     2.0;
     format      ascii;
     class       dictionary;
-    location    "system";
-    object      controlDict;
+    location    "constant";
+    object      transportProperties;
 }
 // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
 
-application     sFoam;
+phases (water air);
 
-startFrom       startTime;
+water
+{
+    transportModel  Newtonian;
+    nu              1e-06;
+    rho             1000;
+    Cp              4186;
+    kappa       17.9;
+    mu          1.1e-3;
+    D           1e-9;
+    DAS         1.85e-4;
+}
 
-startTime       0;
+air
+{
+    transportModel  Newtonian;
+    nu              1.48e-05;
+    rho             1;
+    Cp              1;
+    kappa           1.0;
+    mu              1.48e-05;
+    D               1e-9;
+    betaT           1e-4;
+    betaC           0.01;
+    TRef            300;
+    CRef            0.48;
+}
 
-stopAt          endTime;
-
-endTime         10;
-
-deltaT          0.001;
-
-writeControl    adjustableRunTime;
-
-writeInterval   0.05;
-
-purgeWrite      0;
-
-writeFormat     binary;
-
-writePrecision  6;
-
-writeCompression off;
-
-timeFormat      general;
-
-timePrecision   6;
-
-runTimeModifiable yes;
-
-adjustTimeStep  yes;
-
-maxCo           1;
-maxAlphaCo      1;
-
-maxDeltaT       1;
-
+sigma            0.07;
 
 // ************************************************************************* //
