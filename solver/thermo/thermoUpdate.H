@@ -1,3 +1,5 @@
+Info << "Reading field thermoUpdate\n"<< endl;
+
 forAll(mesh.cells(), i)
 {
     // Update the phase fraction due to heat/solute transport

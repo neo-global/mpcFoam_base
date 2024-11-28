@@ -189,6 +189,11 @@ int main(int argc, char *argv[])
             << "  ClockTime = " << runTime.elapsedClockTime() << " s"
             << nl << endl;
     }
+   // #include "dimensionedType.H"
+
+// Example field, e.g., rho or phi
+/*Info << "Dimensions of rho: " << rho.dimensions() << endl;
+Info << "Dimensions of phi: " << phi.dimensions() << endl;*/
 
     Info<< "End\n" << endl;
 

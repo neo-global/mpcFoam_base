@@ -1,6 +1,6 @@
 
 //This replaces CEqn.H. Discuss in case of doubt.
-
+Info << "Reading field YEqn\n"<< endl;
 dictionary& customDict = mesh.lookupObjectRef<IOdictionary>("values");
 word solveScalar(customDict.lookup("solveScalar"));
 if(solveScalar=="true")
@@ -24,11 +24,11 @@ if(solveScalar=="true")
 	if(useDtf=="true")
 	{
 	    //Dtf *= alphaf;
-	    Dtf=Dtf*(alphaf*rho1_B);
+	    Dtf=Dtf*(alphaf);
 	}
 
         //surfaceScalarField alphaPhi = fvc::flux(U)*alphaf;
-        surfaceScalarField alphaPhi = rhoPhi*alphaf;
+        surfaceScalarField alphaPhi= rhoPhi*alphaf;
         
 
 	word interfaceMethod
@@ -36,8 +36,9 @@ if(solveScalar=="true")
 	    mesh.solverDict("alpha").lookupOrDefault<word>("interfaceMethod", "isoAdvector")
 	);	
 	if(interfaceMethod=="isoAdvector")
-	{
-	     alphaPhi = advector.alphaPhi();
+	{     
+	     Info << "Reading field Advector\n"<< endl;
+	     alphaPhi = rho1_B*advector.alphaPhi();
 	}
 
 
@@ -60,16 +61,60 @@ if(solveScalar=="true")
     );
 
         */   
-        
         volScalarField YRel("YRel", Y2 - Y);
+     /*  Info<< "Reading field AlphaDiv\n" << endl;
+volScalarField AlphaDiv =fvc::div(alphaPhi , Y, divScheme);
+
+Info<< "Reading field Ddt\n" << endl;
+volScalarField Ddt =fvc::ddt(rho,Y);
+
+Info<< "Reading field LapL\n" << endl;
+volScalarField LapL =fvc::laplacian(Dtf, Y);
+
+Info<< "Reading field LapR\n" << endl;
+volScalarField LapR =fvc::laplacian(Dtf, YRel);
+
+Info<< "Reading field DivR\n" << endl;
+volScalarField DivR =fvc::div(alphaPhi, YRel);
+ 
+
+//dimensionedScalar Div =((phi*fvc::interpolate(Cp))*T);
+//surfaceScalarField INCP=fvc::interpolate(Cp);*/
+
+    
+    
+    
+    
+    
+    
+    
+/*#include "dimensionedType.H"
+Info << "Reading field alphaPhi\n" << alphaPhi.dimensions()<< endl;
+Info << "Reading field Y\n" << Y.dimensions()<< endl;
+Info << "Reading field Dtf\n" << Dtf.dimensions()<< endl;
+Info << "Reading field rho1_B\n" << rho1_B.dimensions()<< endl;
+Info << "Reading field rhoPhi\n" << rhoPhi.dimensions()<< endl;
+//Info << "Reading field L\n" << L.dimensions()<< endl;
+//Info << "Reading field L1\n" << L1.dimensions()<< endl;
+Info << "Reading field AlphaDiv\n" << AlphaDiv.dimensions()<< endl;
+Info << "Reading field Ddt\n" << Ddt.dimensions()<< endl;
+Info << "Reading field LapL\n" << LapL.dimensions()<< endl;
+Info << "Reading field LapR\n" << LapR.dimensions()<< endl;
+Info << "Reading field DivR\n" << DivR.dimensions()<< endl;
+//Info << "Reading field INCP\n" << INCP.dimensions()<< endl;*/ 
+        
+        
+        
+      
+        
            
         fvScalarMatrix YEqn
         (
              fvm::ddt(rho,Y)
            + fvm::div(alphaPhi, Y, divScheme) //replace this with alphaPhi1Un
-           - fvm::laplacian(Dtf, Y)
+           - fvm::laplacian(Dtf*rho1_B, Y)
            ==
-           fvc::laplacian(Dtf, YRel)
+           fvc::laplacian(Dtf*rho1_B, YRel)
            - fvc::div(alphaPhi, YRel)
            //  ==
            // fvOptions(rho, Y)
@@ -101,6 +146,27 @@ if(solveScalar=="true")
             );
 
             alphaPhiVol.write();
+            Dt.write();
+            Y.write();
+        }
+        
+        
+    if(mesh.time().writeTime())
+        {
+            volScalarField Cp
+            (
+        	IOobject
+        	(
+                    "Cp",
+                    runTime.timeName(),
+                    mesh,
+                    IOobject::READ_IF_PRESENT,
+                    IOobject::AUTO_WRITE
+        	),
+        	fluid.Cp()
+            );
+
+            Cp.write();
             Dt.write();
             Y.write();
         }

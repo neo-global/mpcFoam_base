@@ -16,7 +16,7 @@ FoamFile
 // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
 
 
-solveScalar	false;
+solveScalar	true;
 Ystar		0.001449;	//mass fraction in liquid
 DY		1.88e-9;	//m2/s
 Sct		1;
@@ -27,8 +27,11 @@ YgStar		0.832;		//pY, partial pressure ~ mole fraction in gas
 convectionBound	0.5;
 diffusionBound	0.5;
 
+useDtf    true;
+
 tMethod med;	//low (Le/Urel), med(0.3k/eps), high(k/eps)
 dirMethod foam; //foam, fluent
+
 
 /*
 tMethod: calculate tTurbLoc:

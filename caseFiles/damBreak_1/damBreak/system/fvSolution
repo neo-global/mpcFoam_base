@@ -31,6 +31,22 @@ solvers
         tolerance       1e-8;
         relTol          0;
     }
+    
+     "alpha.*"
+    {
+	interfaceMethod "isoAdvector";
+	isoFaceTol	1e-10;
+	surfCellTol	1e-3;
+	snapTol		0;
+	nAlphaBounds	3;
+	clip		false;
+	writeIsoFaces	false;
+//	gradAlphaNormal	true;	
+
+	nAlphaCorr	1;	
+        nAlphaSubCycles 1;
+        cAlpha          1;
+        }
 
     "pcorr.*"
     {
@@ -61,6 +77,14 @@ solvers
         tolerance       1e-06;
         relTol          0;
     }
+    
+    UFinal
+    {
+        $U;
+        tolerance       1e-16;
+        relTol          0;
+    }
+    
     T
     {
         solver          PBiCG;
@@ -74,15 +98,73 @@ solvers
     {
         $T;
     }
+    
+    "Y|Yexp"
+    {
+	$U;
+    }
+
+    Yi 
+    {
+	$U;
+	relTol	0;
+    }
+
+
+    Phi
+    {
+    	$p_rgh;
+    } 
+    
+}
+PIMPLE
+{    momentumPredictor yes;
+     nThermoCorr     10;
+    nCorrectors         2;
+    nNonOrthogonalCorrectors 1;
+    nOuterCorrectors	1; //40;
+    turbOnFinalIterOnly false; 
+ 
+    residualControl
+    {
+        U               1e-5;
+        p_rgh           1e-5;
+        "pcorr.*"       1e-5;
+        k               1e-6;
+        epsilon         1e-6;
+    }
+    outerCorrectorResidualControl
+    {
+        U
+        {
+            tolerance   1e-5;
+            relTol      0.0;   
+        }
+        p_rgh 
+        {
+            tolerance   1e-5;
+            relTol      0;   
+        }
+        p_rghFinal 
+        {
+            tolerance   1e-5;
+            relTol      0;   
+        }
+        epsilon
+        {
+            tolerance   1e-6;
+            relTol      0;
+        }
+        k
+        {
+            tolerance   1e-6;
+            relTol      0;
+        }
+    }
+pRefCell 0;
+pRefValue 101325;
 }
 
-PIMPLE
-{
-    momentumPredictor   no;
-    nOuterCorrectors    1;
-    nCorrectors         3;
-    nNonOrthogonalCorrectors 0;
-}
 
 relaxationFactors
 {
@@ -92,5 +174,11 @@ relaxationFactors
     }
 }
 
+potentialFlow
+{
+	nNonOrthogonalCorrectors 10;
+	PhiRefCell 0;
+	PhiRefValue 1e5;
+}
 
 // ************************************************************************* //
