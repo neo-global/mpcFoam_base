@@ -17,31 +17,6 @@
       - L*fvc::div(rhoPhi)               //LatentHeatTerm    // dimension[1,1,-3,0,0,0]
     );
 
-
-/*Info<< "Reading field Div\n" << endl;
-volScalarField Div =fvc::div(rhoPhi*fvc::interpolate(Cp), T, "div(phi,T)");
-
-//dimensionedScalar Div =((phi*fvc::interpolate(Cp))*T);
-surfaceScalarField INCP=fvc::interpolate(Cp);*/
-
-    
-    
-    
-    
-    
-    
-    
-//#include "dimensionedType.H"
-//Info << "Reading field p_rgh\n" << rho.dimensions()<< endl;
-//Info << "Reading field kappa\n" << kappa.dimensions()<< endl;
-/*Info << "Reading field Sp\n" << Sp.dimensions()<< endl;
-Info << "Reading field Sc\n" << Sc.dimensions()<< endl;
-Info << "Reading field rhoPhi\n" << rhoPhi.dimensions()<< endl;
-Info << "Reading field L\n" << L.dimensions()<< endl;
-//Info << "Reading field L1\n" << L1.dimensions()<< endl;
-Info << "Reading field Div\n" << Div.dimensions()<< endl;
-Info << "Reading field Cp\n" << Cp.dimensions()<< endl;
-Info << "Reading field INCP\n" << INCP.dimensions()<< endl;*/
     TEqn.relax();
     TEqn.solve();
 }

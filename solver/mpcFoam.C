@@ -48,9 +48,7 @@ Description
 #include "fvcSmooth.H"
 //#include "fieldToCell.H"
 //#include "cellSet.H"
-
-//***************************************from SolidificationFoam***************************//
-#include "create/solidificationSystem/solidificationSystem.H"
+#include "solidificationSystem.H"
 
 // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
 
@@ -64,27 +62,15 @@ int main(int argc, char *argv[])
     #include "createDynamicFvMesh.H"
     #include "initContinuityErrs.H"
     #include "createDyMControls.H"
-    #include "create/createFields.H"
-    #include "create/createFieldRefssFoam.H"        // added from SolidificationFoam
+    #include "createFields.H"
+    #include "createFieldRefssFoam.H"        // added from SolidificationFoam
    // #include "createTimeControls.H"     // added from SolidificationFoam Not Sure about this it is required or not.
-    #include "create/readThermoPropertiessFoam.H"  // added from SolidificationFoam
+    #include "readThermoPropertiessFoam.H"  // added from SolidificationFoam
     #include "createFunctionObjects.H"
-//    #include "createTurbulenceWakeSource.H"
     #include "createAlphaFluxes.H"
     #include "initCorrectPhi.H"
     #include "createUfIfPresent.H"
     
-    
-    
-   // #include "setRootCase.H"
-   // #include "createTime.H"
-   // #include "createMesh.H"
-    //#include "createControl.H"
-   // #include "createFields.H"
-   //#include "createFieldRefs.H"
-  //   #include "createTimeControls.H"
-    //#include "readThermoProperties.H"
-
     turbulence->validate();
 
     if (!LTS)
@@ -160,12 +146,13 @@ int main(int argc, char *argv[])
             }
             #include "alphaControls.H"
             #include "alphaEqnSubCycle.H"
-
             mixture.correct();
 
-            #include "thermoLoopsFoam.H" // Added
+//            #include "thermo/thermoLoop.H" // Added
+            mixture.correct();
+	    rho = alpha1*fluid.rho()+alpha2*rho2;
+
             #include "UEqn.H"
-            
             
 
             // --- Pressure corrector loop

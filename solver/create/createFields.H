@@ -29,16 +29,14 @@ volVectorField U
 );
 
 
-
-
-// ************************************    From    SolidificationFoam     ****************************//
+// From    SolidificationFoam
 solidificationSystem fluid(U);
 
 Info<< "Reading field T\n" << endl;
 volScalarField T
 (
     IOobject
-    (                                       // From    SolidificationFoam     ****************************//
+    (                                       // From SolidificationFoam 
         "T",
         runTime.timeName(),
         mesh,
@@ -47,11 +45,6 @@ volScalarField T
     ),
     mesh
 );
-// ************************************    From    SolidificationFoam     ****************************//
-
-
-
-
 
 
 #include "createPhi.H"
@@ -63,11 +56,23 @@ volScalarField& alpha1(mixture.alpha1());     //liquid
 volScalarField& alpha2(mixture.alpha2());     //air
 #include "createFaceFractions.H"
 
-const dimensionedScalar& rho1 = mixture.rho1();	//Use a copy instead of reference. Do not require this as we get this from fluid.rho() of sFoam
-//const dimensionedScalar& rho1 = fluid.rho().dimensionedInternalField();
+volScalarField rhoDense	//Copy of solidification rho for debug
+(
+    IOobject
+    (
+        "rhoDense",
+        runTime.timeName(),
+        mesh,
+        IOobject::READ_IF_PRESENT,
+	IOobject::AUTO_WRITE
+    ),
+    fluid.rho()
+);
+
+const dimensionedScalar& rho1 = mixture.rho1();	//Do not require this as we get this from fluid.rho() of sFoam
 const dimensionedScalar& rho2 = mixture.rho2();         // rho2 of air
 
-// Need to store rho for ddt(rho, U)
+//Rho based on solidification+VOF.
 volScalarField rho
 (
     IOobject
@@ -78,9 +83,9 @@ volScalarField rho
         IOobject::READ_IF_PRESENT,
 	IOobject::AUTO_WRITE
     ),
-  //  alpha1*rho1 + alpha2*rho2
-   alpha1*fluid.rho() + alpha2*rho2                            //error chnace
+   alpha1*fluid.rho() + alpha2*rho2                           
 );
+// Need to store rho for ddt(rho, U)
 rho.oldTime();
 
 #include "createAuxilaryFieldssFoam.H"    // added from solidificationFoam
@@ -114,15 +119,13 @@ surfaceScalarField rhoPhi
 );
 
 
-
-
 // ************************************    From    SolidificationFoam     ****************************//
 //#include "compressibleCreatePhi.H"
 
 // Kinematic density for buoyancy force
 volScalarField rhok
 (
-    IOobject                                           // From    SolidificationFoam     ****************************//
+    IOobject                                          
     (
         "rhok",
         runTime.timeName(),
@@ -135,7 +138,7 @@ volScalarField rhok
 
 
 //Some changes required below rho ==rhok
-
+//Need access to original solidification module to understand what the above comment needs. -RM
 
 // Construct incompressible turbulence model
 autoPtr<incompressible::turbulenceModel> turbulence
@@ -187,6 +190,7 @@ if (p_rgh.needReference())
 mesh.setFluxRequired(p_rgh.name());
 mesh.setFluxRequired(alpha1.name());
 
+/*
 volVectorField Um
 (
     IOobject
@@ -212,9 +216,11 @@ volScalarField alpham
     ),
     alpha1
 );
+*/
 
 #include "createMRF.H"
 
+/*
 volScalarField surfaceCell
 (
     IOobject
@@ -228,10 +234,9 @@ volScalarField surfaceCell
     mesh,
     dimensionedScalar("zero", dimless, 0.0)
 );
+*/
 
 #include "createCustomDict.H"
-//#include "createScalarFields.H"
 #include "createScalarSource.H"
 #include "createIsoAdvection.H"
-
 #include "createFvOptions.H"

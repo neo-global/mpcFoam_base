@@ -1,3 +1,0 @@
-solidificationSystem.C
-
-LIB = $(FOAM_USER_LIBBIN)/libsolidificationSystem

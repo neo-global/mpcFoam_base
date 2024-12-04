@@ -1,0 +1,89 @@
+/*---------------------------------------------------------------------------*\
+  =========                 |
+  \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox
+   \\    /   O peration     | Website:  https://openfoam.org
+    \\  /    A nd           | Version:  6
+     \\/     M anipulation  |
+\*---------------------------------------------------------------------------*/
+Build  : 6-47517f2ebb1b
+Exec   : sFoam
+Date   : Dec 04 2024
+Time   : 12:26:02
+Host   : "rishi-PSRL"
+PID    : 754134
+I/O    : uncollated
+Case   : /home/rishi/OpenFOAM/rishi-6/solver/mpcFoam_base/mpcFoam_base/caseFiles/sFoam
+nProcs : 1
+sigFpe : Enabling floating point exception trapping (FOAM_SIGFPE).
+fileModificationChecking : Monitoring run-time modified files using timeStampMaster (fileModificationSkew 10)
+allowSystemOperations : Allowing user-supplied system call operations
+
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+Create time
+
+Create mesh for time = 0
+
+
+PIMPLE: Convergence criteria found
+        U: tolerance 1e-05
+        p_rgh: tolerance 1e-05
+        "pcorr.*": tolerance 1e-05
+        k: tolerance 1e-06
+        epsilon: tolerance 1e-06
+
+
+PIMPLE: Operating solver in PISO mode
+
+Reading field p_rgh
+
+Reading field U
+
+Reading field T
+
+Reading/calculating face flux field phi
+
+Reading transportProperties
+
+Selecting incompressible transport model Newtonian
+Selecting incompressible transport model Newtonian
+Vcell.
+Selecting turbulence model type laminar
+Selecting laminar stress model Stokes
+
+Reading g
+
+Reading hRef
+Calculating field g.h
+
+No MRF models present
+
+--> FOAM Warning : Entry 'reconstructionScheme' not found in dictionary "/home/rishi/OpenFOAM/rishi-6/solver/mpcFoam_base/mpcFoam_base/caseFiles/sFoam/system/fvSolution.solvers.alpha.*"
+using default
+Selecting reconstructionScheme: isoAlpha
+Area :0
+No finite volume options present
+DICPCG:  Solving for pcorr, Initial residual = 0, Final residual = 0, No Iterations 0
+DICPCG:  Solving for pcorr, Initial residual = 0, Final residual = 0, No Iterations 0
+time step continuity errors : sum local = 0, global = 0, cumulative = 0
+Courant Number mean: 0 max: 0
+
+Starting time loop
+
+Courant Number mean: 0 max: 0
+Interface Courant Number mean: 0 max: 0
+Time = 0.005
+
+Area :0
+isoAdvection: After conservative bounding: min(alpha) = 0, max(alpha) = 1 + 0
+Phase-1 volume fraction = 0.5  Min(alpha.water) = 0  1 - Max(alpha.water) = 0
+Area :0
+DILUPBiCG:  Solving for T, Initial residual = 0.000270822, Final residual = 2.22268e-11, No Iterations 50
+Reading field thermoUpdate
+
+Reading field YEqn
+
+Reading field Advector
+
+smoothSolver:  Solving for Y, Initial residual = 7.32468e-10, Final residual = 7.32468e-10, No Iterations 0
+THERMO: iteration 1 residual: 0
+smoothSolver:  Solving for Ux, Initial residual = 0, Final residual = 0, No Iterations 0

@@ -1,11 +1,13 @@
 EXE_INC = \
+    -I. \
     -I./create \
-    -I./species \
     -I./alpha \
+    -I./thermo \
     -I./lnInclude \
     -I../VoF \
     -I../interpolationSchemes/lnInclude \
     -I../twoPhaseVOF/src/VoF/lnInclude \
+    -I../solidificationSystem/lnInclude \ 
     -I$(LIB_SRC)/transportModels/twoPhaseMixture/lnInclude \
     -I$(LIB_SRC)/transportModels \
     -I$(LIB_SRC)/transportModels/incompressible/lnInclude \
@@ -19,7 +21,6 @@ EXE_INC = \
     -I$(LIB_SRC)/sampling/lnInclude \
     -I$(LIB_SRC)/regionModels/regionModel/lnInclude \
     -I$(LIB_SRC)/regionModels/surfaceFilmModels/lnInclude \
-    -I./create/solidificationSystem/lnInclude 
 
 
 EXE_LIBS = \

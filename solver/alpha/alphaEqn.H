@@ -9,7 +9,6 @@ word interfaceMethod
 // Advancing alpha1 field
 if (interfaceMethod == "MULES")
 {
-    //advector.construct();
     #include "alphaEqnMULES.H"
     advector.construct();
 }
@@ -17,9 +16,7 @@ else if (interfaceMethod == "isoAdvector")
 {
     // Updating alpha1
     advector.advect();
-
-    const dimensionedScalar& rho1f(rho1);
-    const dimensionedScalar& rho2f(rho2);
+    #include "rhofs.H"
     rhoPhi = advector.getRhoPhi(rho1f, rho2f);
 
     alpha2 = 1.0 - alpha1;
@@ -32,31 +29,4 @@ else if (interfaceMethod == "isoAdvector")
         << endl;
 
     advector.construct();
-    //advector.reconstruct(alpha); //more generalizable implementation also exists.
-}
-
-//U not solved but prescribed and optionally periodic
-if (prescribedU)
-{
-
-    //Setting velocity field and face fluxes for next time step
-    const scalar t(runTime.time().value());
-    const scalar dt(runTime.deltaT().value());
-    if (reverseTime > 0.0 && t >= reverseTime)
-    {
-        Info<< "Reversing flow" << endl;
-        phi *= -1.0;
-        U *= -1.0;
-        reverseTime = -1.0;
-    }
-    if (period > 0.0)
-    {
-        const scalar uFactor
-        (
-            .5*(Foam::cos(2.0*M_PI*t/period)
-                + Foam::cos(2.0*M_PI*(t + dt)/period))
-        );
-        phi = uFactor*phi.prevIter();
-        U = uFactor*U.prevIter();
-    }
 }
